@@ -127,30 +127,26 @@ Steps:
   - incorporate external features like holidays, weather history + forecast, and gas prices.
 
   ### Project Structure
-  ```
-  ├── README.md
-  ├── app
-  │   └── app.py
-  ├── data
-  │   ├── features
-  │   ├── processed
-  │   └── raw
-  ├── models
-  ├── notebooks
-  │   ├── 01_eda.ipynb
-  │   ├── 02_feature_engineering.ipynb
-  │   └── 03_modeling.ipynb
-  ├── reports
-  │   ├── figures
-  │   └── results
-  ├── requirements.txt
-  ├── src
-  │   ├── data
-  │   ├── features
-  │   ├── models
-  │   ├── pipeline
-  │   └── utils
-  └── structure.txt
-
-
-  ```
+  ```├── README.md
+     ├── app
+        └── app.py
+     ├── data
+        ├── features
+        ├── processed
+        └── raw
+     ├── models
+     ├── notebooks
+        ├── 01_eda.ipynb
+        ├── 02_feature_engineering.ipynb
+        └── 03_modeling.ipynb
+     ├── reports
+        ├── figures
+        └── results
+     ├── requirements.txt
+     ├── src
+        ├── data
+        ├── features
+        ├── models
+        ├── pipeline
+        └── utils
+     └── structure.txt```
