@@ -82,6 +82,49 @@ Raw Invoices &rarr; Validation &rarr; Cleaning &rarr; Standardization &rarr; Com
 4. Convert numeric fields
 5. Combine into a single dataset
 
+### Data Processing
+After ingestion, the data is transformed into a time based format.
+
+Steps:
+  - aggregate invoices into weekly demand by SKU
+  - fill missing SKU week combinations with 0 (for no order placed)
+  - negative quantities are treated as returns and subtracted from the week's order
+  - cleaned demand is output 
+
+### Engineered Features:
+  - lag features
+    - `lag_1`,`lag_2`,`lag_4` are previous week's demand
+  - rolling stats
+    - rolling mean (window = 4)
+    - rolling standard deviation
+  - time features
+    - week 
+    - month
+    - quarter
+  - planned features
+    - holidays
+    - weather forecast
+    - gas prices
+  
+  ### Modeling Approach
+  - global standard linear regression: predicts weekly demand across all 98 SKU's to build an inital pipeline before comparing to more complex models.
+  - baseline comparison: predicts exactly the previous week's sales `lag_1` to test how well the linear regression model learns ordering patterns.
+
+  ### Evaluation Metrics
+  - **MAE (Mean Absolute Error)**: measures the average magnitude of forecasting errors in cases of beer.
+  - **RMSE (Root Mean Squared Error)**: penalizes large, unexpected spikes or dips in the order predictions.
+  - **WMAPE (Weighted Mean Absolute Percentage Error)**: this was chosen because of how zero inflated the data is.
+
+  ### Demand Estimation Strategy
+  Because sales and inventory data is not available, we must infer data from the ordering invoices. We have to treat orders as a proxy for demand. Accounting for inconsistent ordering patterns, returns, and stockouts is the key to accurate demand estimation. 
+
+  ### System Architecture
+  Raw Invoices -> Data Ingestion -> Cleaning Data -> Feature Engineering -> Model Training -> Demand Prediction -> Order Recommendations -> Dashboard
+
+  ### Future Improvements
+  - cluster SKUs by volume ordered and train models for each cluster. This will improve accuracy and lessen the impact of the zero filled data. 
+  - explore tree based models or specialized count models that will handle sparse, non linear demand better than stanrd linear regression can.
+  - incorporate external features like holidays, weather history + forecast, and gas prices.
 
 
 
