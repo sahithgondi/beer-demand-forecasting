@@ -119,7 +119,7 @@ Steps:
   Because sales and inventory data is not available, we must infer data from the ordering invoices. We have to treat orders as a proxy for demand. Accounting for inconsistent ordering patterns, returns, and stockouts is the key to accurate demand estimation. 
 
   ### System Architecture
-  Raw Invoices -> Data Ingestion -> Cleaning Data -> Feature Engineering -> Model Training -> Demand Prediction -> Order Recommendations -> Dashboard
+  Raw Invoices &rarr; Data Ingestion &rarr; Cleaning Data &rarr; Feature Engineering &rarr; Model Training &rarr; Demand Prediction &rarr; Order Recommendations &rarr; Dashboard
 
   ### Future Improvements
   - cluster SKUs by volume ordered and train models for each cluster. This will improve accuracy and lessen the impact of the zero filled data. 
