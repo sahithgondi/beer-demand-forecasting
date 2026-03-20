@@ -130,25 +130,25 @@ Steps:
   ```
      ├── README.md
      ├── app
-        └── app.py
+     |  └── app.py
      ├── data
-        ├── features
-        ├── processed
-        └── raw
+     |  ├── features
+     |  ├── processed
+     |  └── raw
      ├── models
      ├── notebooks
-        ├── 01_eda.ipynb
-        ├── 02_feature_engineering.ipynb
-        └── 03_modeling.ipynb
+     |  ├── 01_eda.ipynb
+     |  ├── 02_feature_engineering.ipynb
+     |  └── 03_modeling.ipynb
      ├── reports
-        ├── figures
-        └── results
+     |  ├── figures
+     |  └── results
      ├── requirements.txt
      ├── src
-        ├── data
-        ├── features
-        ├── models
-        ├── pipeline
-        └── utils
+     |  ├── data
+     |  ├── features
+     |  ├── models
+     |  ├── pipeline
+     |  └── utils
      └── structure.txt
   ```
