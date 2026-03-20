@@ -2,19 +2,19 @@
 ## Family Convenience Store
 A data pipeline and forecasting system designed to optimize weekly beer ordering for my family's gas station.
 
-Beer ordering is currently based on:
+beer ordering is currently based on:
  - intuition
  - last week's orders
  - current stock
  - supplier recommendations
 
-This has been leading to:
+this has been leading to:
  - over ordering &rarr; wasted storage space and unsold beer
  - under ordering &rarr; decrease in beer sales
  - returns to supplier &rarr; wasting time and resources
 
-### Project Goal
- Build a system that will look at past invoices and:
+### Goal is to build a system that will give recommendations on how much beer to order each week.
+we will look at past invoices to:
  - learn ordering patterns
  - predict the optimal weekly order quantities
  - provide recommendations with explanations via a dashboard
