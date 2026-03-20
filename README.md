@@ -1,6 +1,6 @@
 # Beer Ordering Optimization System
 ## Family Convenience Store
-A data pipeline and forecasting system designed to optimize weekly beer ordering for my family's gas station.
+A forecasting system designed to optimize weekly beer ordering for my family's gas station.
 
 Beer ordering is currently based on:
  - intuition
