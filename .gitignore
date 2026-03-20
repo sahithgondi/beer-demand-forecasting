@@ -7,6 +7,8 @@ data/features/*
 !data/processed/.gitkeep
 !data/features/.gitkeep
 
+!data/**/*.dvc
+
 # models
 models/*
 !models/.gitkeep
