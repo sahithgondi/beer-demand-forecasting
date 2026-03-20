@@ -5,3 +5,4 @@ data/features/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/features/.gitkeep
+.idea/
