@@ -127,7 +127,8 @@ Steps:
   - incorporate external features like holidays, weather history + forecast, and gas prices.
 
   ### Project Structure
-  ```├── README.md
+  ```
+     ├── README.md
      ├── app
         └── app.py
      ├── data
@@ -149,4 +150,5 @@ Steps:
         ├── models
         ├── pipeline
         └── utils
-     └── structure.txt```
+     └── structure.txt
+     ```
