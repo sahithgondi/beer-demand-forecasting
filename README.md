@@ -2,19 +2,19 @@
 ## Family Convenience Store
 A data pipeline and forecasting system designed to optimize weekly beer ordering for my family's gas station.
 
-beer ordering is currently based on:
+Beer ordering is currently based on:
  - intuition
  - last week's orders
  - current stock
  - supplier recommendations
 
-this has been leading to:
+This has been leading to:
  - over ordering &rarr; wasted storage space and unsold beer
  - under ordering &rarr; decrease in beer sales
  - returns to supplier &rarr; wasting time and resources
 
 ### Goal is to build a system that will give recommendations on how much beer to order each week.
-we will look at past invoices to:
+We will look at past invoices to:
  - learn ordering patterns
  - predict the optimal weekly order quantities
  - provide recommendations with explanations via a dashboard
@@ -111,9 +111,9 @@ Steps:
   - baseline comparison: predicts exactly the previous week's sales `lag_1` to test how well the linear regression model learns ordering patterns.
 
   ### Evaluation Metrics
-  - **MAE (Mean Absolute Error)**: measures the average magnitude of forecasting errors in cases of beer.
-  - **RMSE (Root Mean Squared Error)**: penalizes large, unexpected spikes or dips in the order predictions.
-  - **WMAPE (Weighted Mean Absolute Percentage Error)**: this was chosen because of how zero inflated the data is.
+  - **MAE (mean absolute error)**: measures the average magnitude of forecasting errors in cases of beer.
+  - **RMSE (root mean squared error)**: penalizes large, unexpected spikes or dips in the order predictions.
+  - **WMAPE (weighted mean absolute percentage error)**: this was chosen because of how zero inflated the data is.
 
   ### Demand Estimation Strategy
   Because sales and inventory data is not available, we must infer data from the ordering invoices. We have to treat orders as a proxy for demand. Accounting for inconsistent ordering patterns, returns, and stockouts is the key to accurate demand estimation. 
