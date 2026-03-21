@@ -116,7 +116,7 @@ Steps:
   - **WMAPE (weighted mean absolute percentage error)**: this was chosen because of how zero inflated the data is.
 
   ### Demand Estimation Strategy
-  Because sales and inventory data is not available, we must infer data from the ordering invoices. We have to treat orders as a proxy for demand. Accounting for inconsistent ordering patterns, returns, and stockouts is the key to accurate demand estimation. 
+  Because sales and inventory data is not available, we must infer data from the ordering invoices. We have to treat orders as a direct indicator for demand. Accounting for inconsistent ordering patterns and returns is the way to accurately estimating demand. 
 
   ### System Architecture
   Raw Invoices &rarr; Data Ingestion &rarr; Cleaning Data &rarr; Feature Engineering &rarr; Model Training &rarr; Demand Prediction &rarr; Order Recommendations &rarr; Dashboard
