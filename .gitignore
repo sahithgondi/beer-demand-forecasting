@@ -7,12 +7,21 @@ data/features/*
 !data/processed/.gitkeep
 !data/features/.gitkeep
 
-# dont ignore all .dvc files inside data
+# dont ignore any .dvc files inside data
 !data/**/*.dvc
 
 # models
 models/*
 !models/.gitkeep
+
+# reports generated 
+reports/
+
+# python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
 # notebooks
 .ipynb_checkpoints/
@@ -25,7 +34,7 @@ venv/
 .idea/
 
 # os
-.DS_Store
+**/.DS_Store
 
 # logs
 logs/
