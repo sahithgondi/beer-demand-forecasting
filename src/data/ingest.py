@@ -19,7 +19,7 @@ COLUMN_MAP = {
     "total": "total_sales",
 }
 
-#columns that must exist in every input csv
+# columns that must exist in every input csv
 REQUIRED_COLUMNS = [
     "sku",
     "itemName",
@@ -31,18 +31,15 @@ REQUIRED_COLUMNS = [
 
 def extract_date_from_filename(filename: str) -> str:
     # extracts date from filename
-    return Path(filename).stem #removes file extension
+    return Path(filename).stem
 
 
 def load_one_file(path: Path) -> pd.DataFrame:
-    # loads and cleans a single csv file
-    df = pd.read_csv(path, sep=";") # read csv into df sep by ; not ,
+    # simply loads a single csv file and standardizes columns
+    df = pd.read_csv(path, sep=";") 
 
-   # print("RAW COLUMNS:", df.columns.tolist())
-
-    #need to clean col names
-    df.columns = df.columns.str.strip()
-    df.columns = df.columns.str.replace('\ufeff', '', regex = False)
+    # strip headers to prevent key errors
+    df.columns = df.columns.str.strip().str.replace('\ufeff', '', regex=False)
 
     # col check
     missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
@@ -52,54 +49,28 @@ def load_one_file(path: Path) -> pd.DataFrame:
     # add a date column that comes from filename
     df["date"] = pd.to_datetime(extract_date_from_filename(path.name), format="%Y-%m-%d")
 
-    # rename cols to stadnardized cols
+    # rename cols to standardized cols
     df = df.rename(columns=COLUMN_MAP)
 
-    #final order ####################################
-    """
-    """
     keep_cols = [
-        "date",
-        "sku",
-        "item_name",
-        "unit_upc",
-        "case_upc",
-        "quantity",
-        "unit_price",
-        "total_sales",
+        "date", "sku", "item_name", "unit_upc",
+        "case_upc", "quantity", "unit_price", "total_sales",
     ]
 
-    # make sure all cols exist and adds missing as NA
     for col in keep_cols:
         if col not in df.columns:
             df[col] = pd.NA
 
-    # to keep only the relevant cols
+    # pass the raw combined columns without doing data type cleaning (handled by clean.py now)
     df = df[keep_cols].copy()
-
-    # clean and normalize
-    df["sku"] = df["sku"].astype(str).str.strip()
-    df["item_name"] = df["item_name"].astype(str).str.strip()
-    df["quantity"] = pd.to_numeric(df["quantity"], errors="coerce")
-    df["unit_price"] = pd.to_numeric(df["unit_price"], errors="coerce")
-    df["total_sales"] = pd.to_numeric(df["total_sales"], errors="coerce")
 
     return df
 
 
 def main() -> None:
-    """
-    Main pipeline:
-    load all csvs
-    clean them
-    combine into one dataset
-    save output
-    """
-
-    # create out dir if not exist
+    # main pipeline load all raaw csvs and dump into all_sales.csv
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # get all csv files from raw
     csv_files = sorted(RAW_DIR.glob("*.csv"))
     if not csv_files:
         raise FileNotFoundError("No CSV files found in data/raw")
@@ -109,10 +80,7 @@ def main() -> None:
 
     all_sales.to_csv(OUT_FILE, index=False)
 
-    #print summary of info
-    print(f"Saved {len(all_sales)} rows to {OUT_FILE}")
-    print("Date range:", all_sales["date"].min(), "to", all_sales["date"].max())
-    print("Unique SKUs:", all_sales["sku"].nunique())
+    print(f"Saved {len(all_sales)} raw rows to {OUT_FILE}")
 
 
 if __name__ == "__main__":
