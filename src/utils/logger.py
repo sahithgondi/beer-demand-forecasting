@@ -7,6 +7,10 @@ def log_experiment(model_type, features, mae, rmse, wmape, notes=""):
     # logs experiment results to a central csv tracker
     # define tracking file
     report_file = "reports/experiments.csv"
+
+    # make sure reports directory exists if not creaet it 
+    os.makedirs(os.path.dirname(report_file), exist_ok=True)
+    
     
     # generate unique ids and timestamps
     experiment_id = str(uuid.uuid4())[:8]  # e.g., 'a3b9c24d'
