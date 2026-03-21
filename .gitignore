@@ -7,6 +7,7 @@ data/features/*
 !data/processed/.gitkeep
 !data/features/.gitkeep
 
+# dont ignore all .dvc files inside data
 !data/**/*.dvc
 
 # models
