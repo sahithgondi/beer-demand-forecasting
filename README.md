@@ -172,7 +172,7 @@ Steps:
    cd beer-demand-forecasting
    ```
 
-2. Set up a purely isolated environment:
+2. Set up the environment:
   Create and activate your venv
 
 3. Install dependencies:
