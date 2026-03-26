@@ -45,7 +45,8 @@ def run():
             page.press("#signInName", "Backspace")
 
             # type slowly to see username being filled
-            page.type("#signInName", USERNAME, delay=100)
+            # nevermind no delay
+            page.type("#signInName", USERNAME)
             page.wait_for_timeout(1000)
 
             typed_value = page.locator("#signInName").input_value()
@@ -91,16 +92,20 @@ def run():
             print("Logged in")
             page.screenshot(path="logged_in_state.png")
 
-            # continue download steps here
+            print("This is the url after login", page.url)
+            
+            
+
+
 
         except Exception as e:
             print(f"Automation failed: {e}")
             page.screenshot(path="error_capture.png")
-
+"""
         finally:
             print("Closing browser...")
             browser.close()
-
+"""
 
 if __name__ == "__main__":
     if not USERNAME or not PASSWORD:
