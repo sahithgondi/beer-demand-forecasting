@@ -65,7 +65,7 @@ with tab_owner:
         preds = predict(model, X_latest)
 
         order_table = pd.DataFrame({
-            "Beer (SKU)": latest_rows["item_name"].values,
+            "Beer": latest_rows["item_name"].values,
             "Last Week's Orders (cases)": latest_rows["quantity_clean"].values.astype(int),
             "Recommended Order (cases)": preds.round(0).astype(int),
         })
