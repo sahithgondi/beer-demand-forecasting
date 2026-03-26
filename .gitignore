@@ -14,6 +14,9 @@ data/features/*
 models/*
 !models/.gitkeep
 
+# debugging screenshots from playwright
+*.png
+
 # reports generated 
 reports/
 
