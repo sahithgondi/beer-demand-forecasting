@@ -22,7 +22,12 @@ def run():
     with sync_playwright() as p:
         print("Launching browser...")
         browser = p.chromium.launch(headless=False)
-        context = browser.new_context(accept_downloads=True)
+        
+        # spoof a normal chrome user agent to bypass basic b2b bot detection
+        context = browser.new_context(
+            accept_downloads=True,
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        )
         page = context.new_page()
 
         try:
@@ -86,13 +91,24 @@ def run():
             # click Log In
             page.get_by_role("button", name="Log In").click()
 
-            page.wait_for_load_state("networkidle")
-            page.wait_for_timeout(3000)
+            print("Waiting for redirect to the intermediate page...")
+            
+            # Wait for it to route back to the generic mybeesapp.com holding page
+            page.wait_for_url("https://mybeesapp.com/", timeout=30000)
+            
+            print("Clicking the secondary 'Log In' button...")
+            page.wait_for_selector("text='Log In'", state="visible", timeout=15000)
+            page.locator("text='Log In'").first.click()
+            
+            print("Waiting for final authenticated dashboard...")
+            page.wait_for_url("**/cms/index/home**", timeout=30000)
+            
+            # Wait for the explicit 'Invoices' text on the sidebar
+            page.wait_for_selector("text='Invoices'", state="visible", timeout=15000)
 
-            print("Logged in")
+            print("Logged in successfully!")
+            print("This is the url after login:", page.url)
             page.screenshot(path="logged_in_state.png")
-
-            print("This is the url after login", page.url)
             
             
 
