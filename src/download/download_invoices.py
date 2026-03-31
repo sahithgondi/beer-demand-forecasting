@@ -23,7 +23,7 @@ def run():
         print("Launching browser...")
         browser = p.chromium.launch(headless=False)
         
-        # spoof a normal chrome user agent to bypass basic b2b bot detection
+        # spoof a chrome user agent
         context = browser.new_context(
             accept_downloads=True,
             user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -39,11 +39,10 @@ def run():
             )
 
             # first page email
-            page.wait_for_selector("#signInName", state="visible", timeout=15000)
+            page.wait_for_selector("#signInName", state="visible")
             print("Found username field")
 
             page.click("#signInName")
-            page.wait_for_timeout(500)
 
             # clear any existing value
             page.press("#signInName", "Meta+A")
@@ -52,7 +51,6 @@ def run():
             # type slowly to see username being filled
             # nevermind no delay
             page.type("#signInName", USERNAME)
-            page.wait_for_timeout(1000)
 
             typed_value = page.locator("#signInName").input_value()
             print("Typed username:", typed_value)
@@ -62,12 +60,11 @@ def run():
 
             page.screenshot(path="before_continue.png")
 
-            # the visible button is continueNew not continue
-            page.wait_for_selector("#continueNew", state="visible", timeout=15000)
+            # button is not continue
+            page.wait_for_selector("#continueNew", state="visible")
             print("Found Continue button")
             page.locator("#continueNew").click()
 
-            page.wait_for_timeout(3000)
             page.screenshot(path="after_continue.png")
 
             # sometimes it goes straight ot password other times it will ask for choice
@@ -79,7 +76,7 @@ def run():
                 print("Password choice screen did not appear; checking for direct password page")
 
             # password page
-            page.wait_for_selector("#password", state="visible", timeout=15000)
+            page.wait_for_selector("#password", state="visible")
             print("Found password field")
             page.fill("#password", PASSWORD)
 
@@ -88,29 +85,48 @@ def run():
 
             page.screenshot(path="before_login_click.png")
 
-            # click Log In
+            # click log in
             page.get_by_role("button", name="Log In").click()
 
             print("Waiting for redirect to the intermediate page...")
             
-            # Wait for it to route back to the generic mybeesapp.com holding page
-            page.wait_for_url("https://mybeesapp.com/", timeout=30000)
+            # wait for it to route back to home page
+            page.wait_for_url("https://mybeesapp.com/")
             
             print("Clicking the secondary 'Log In' button...")
-            page.wait_for_selector("text='Log In'", state="visible", timeout=15000)
+            page.wait_for_selector("text='Log In'", state="visible")
             page.locator("text='Log In'").first.click()
+
+            # wait for invoices text on header
+            # page.wait_for_selector("text='Invoices'", state="visible")
             
-            print("Waiting for final authenticated dashboard...")
-            page.wait_for_url("**/cms/index/home**", timeout=30000)
+        #    page.locator("a.bees-link-wrapper[href='/invoices']").first.click()
+
+            print("Waiting for the Invoices link to become visible...")
+            # exvlude the footer links and and only select the one visible
+            invoices_link = page.locator("a.bees-link-wrapper[href='/invoices']:not([target='_blank']):visible")
             
-            # Wait for the explicit 'Invoices' text on the sidebar
-            page.wait_for_selector("text='Invoices'", state="visible", timeout=15000)
+            # page.get_by_text("Invoices").first.click()
+            # if there is still a race condition then wait for this to be visible
+            invoices_link.wait_for(state="visible")
+            invoices_link.click()
+
+            print("Clicked invoices")
 
             print("Logged in successfully!")
             print("This is the url after login:", page.url)
+
             page.screenshot(path="logged_in_state.png")
             
+            page.wait_for_selector("text='All Invoices'").click()
+            print("Selected All Invoices...")
+
+            # keep script open until i close it
+            input("Press Enter to close the browser...")
+        
             
+
+
 
 
 
