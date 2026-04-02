@@ -119,20 +119,25 @@ def run():
 
             print("Logged in successfully!")
             print("This is the url after login:", page.url)
-
+            """
             page.screenshot(path="logged_in_state.png")
+            
+            # Use wait_for_timeout to wait a split second (1000 milliseconds = 1 second)
+            page.wait_for_timeout(100)
             
             page.wait_for_selector("text='All Invoices'").click()
             print("Selected All Invoices...")
-
+            
+            # Wait another split second before looking for table rows
+            page.wait_for_timeout(100)
+            
             # wait until tr in tbody appears in the page DOM
             first_row = page.locator("tbody tr").first
             print("Found first row")
 
             # inside first row find the first span with the class and then get its visible text. then strip
             amount_locator = first_row.locator("span.bees-number-display").first
-            # wait for it to be visible
-            page.pause
+            
             amount_locator.wait_for(state="visible", timeout=60000)
             # get the text and clean it
             amount_text = amount_locator.inner_text().strip()
@@ -147,7 +152,7 @@ def run():
                 print("Clicked View Details for most recent invoice...")
             else:
                 print("Most recent invoice total is not above 200, so we are skipping.")
-                """
+                
             # keep script open until i close it
             input("Press Enter to close the browser...")
         
