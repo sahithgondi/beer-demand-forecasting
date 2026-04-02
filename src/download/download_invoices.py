@@ -102,6 +102,10 @@ def run():
             
         #    page.locator("a.bees-link-wrapper[href='/invoices']").first.click()
 
+            page.goto("https://mybeesapp.com/invoices")
+            print("Sucessfully got to invoices page")
+            
+            """
             print("Waiting for the Invoices link to become visible...")
             # exvlude the footer links and and only select the one visible
             invoices_link = page.locator("a.bees-link-wrapper[href='/invoices']:not([target='_blank']):visible")
@@ -121,6 +125,29 @@ def run():
             page.wait_for_selector("text='All Invoices'").click()
             print("Selected All Invoices...")
 
+            # wait until tr in tbody appears in the page DOM
+            first_row = page.locator("tbody tr").first
+            print("Found first row")
+
+            # inside first row find the first span with the class and then get its visible text. then strip
+            amount_locator = first_row.locator("span.bees-number-display").first
+            # wait for it to be visible
+            page.pause
+            amount_locator.wait_for(state="visible", timeout=60000)
+            # get the text and clean it
+            amount_text = amount_locator.inner_text().strip()
+            # cleans the string and convert to float
+            amount = float(amount_text.replace(",", "").replace("$", ""))
+
+            print("Amount text:", amount_text)
+            
+            # if amount > 200 then click the button
+            if amount > 200:
+                first_row.locator("button:has(svg[data-icon-name='EyeOn'])").click()
+                print("Clicked View Details for most recent invoice...")
+            else:
+                print("Most recent invoice total is not above 200, so we are skipping.")
+                """
             # keep script open until i close it
             input("Press Enter to close the browser...")
         
@@ -133,6 +160,7 @@ def run():
         except Exception as e:
             print(f"Automation failed: {e}")
             page.screenshot(path="error_capture.png")
+            # input("Browser is paused AFTER ERROR for debugging. Inspect the page, then press Enter to close...")
 """
         finally:
             print("Closing browser...")
