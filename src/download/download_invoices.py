@@ -123,43 +123,53 @@ def run():
             page.screenshot(path="logged_in_state.png")
             
             # Use wait_for_timeout to wait a split second (1000 milliseconds = 1 second)
-            page.wait_for_timeout(100)
+            page.wait_for_timeout(1000)
             
             page.wait_for_selector("text='All Invoices'").click()
             print("Selected All Invoices...")
             
             # Wait another split second before looking for table rows
-            page.wait_for_timeout(100)
+            page.wait_for_timeout(1000)
             
-            # wait until tr in tbody appears in the page DOM
-            first_row = page.locator("tbody tr").first
-            print("Found first row")
+            with open("debug_page.html", "w", encoding="utf-8") as f:
+                f.write(page.content())
+            print("tbody count:", page.locator("tbody").count())
+            print("tr count:", page.locator("tr").count())
+            print("amount count:", page.locator("span.bees-number-display").count())
+            print("EyeOn count:", page.locator("button:has(svg[data-icon-name='EyeOn'])").count())
 
-            # inside first row find the first span with the class and then get its visible text. then strip
-            amount_locator = first_row.locator("span.bees-number-display").first
-            
-            amount_locator.wait_for(state="visible", timeout=60000)
-            # get the text and clean it
+            # Anchor off amount spans, since those were present in the working invoice HTML you sent earlier
+            page.locator("span.bees-number-display").first.wait_for(state="visible", timeout=60000)
+
+            amount_locator = page.locator("span.bees-number-display").first
             amount_text = amount_locator.inner_text().strip()
-            # cleans the string and convert to float
-            amount = float(amount_text.replace(",", "").replace("$", ""))
+            amount = float(amount_text.replace("$", "").replace(",", "").strip())
 
             print("Amount text:", amount_text)
+
+            # The website DOM is actually rendering all 'td' cells directly or inside a single container without 'tr' elements bounding each invoice!
+            # Since we just want the most recent (first) invoice, we can simply align them by taking the first of each element in the tbody.
             
-            # if amount > 200 then click the button
+            invoice_number = None
+            try:
+                # The invoice number is the first link inside the table body
+                invoice_number = page.locator("tbody a.hexa-text-link").first.inner_text(timeout=2000).strip()
+                print("Invoice number:", invoice_number)
+            except Exception as e:
+                print(f"Could not extract invoice number. Error: {e}")
+
             if amount > 200:
-                first_row.locator("button:has(svg[data-icon-name='EyeOn'])").click()
-                print("Clicked View Details for most recent invoice...")
+                # The view button is the first button with the EyeOn icon in the table body
+                view_btn = page.locator("tbody button:has(svg[data-icon-name='EyeOn'])").first
+                view_btn.wait_for(state="visible", timeout=10000)
+                view_btn.click()
+                print(f"Clicked View Details for invoice {invoice_number or '[unknown]'}")
             else:
-                print("Most recent invoice total is not above 200, so we are skipping.")
-                
-            # keep script open until i close it
+                print("Most recent invoice total is not above 200, so skipping.")
+
             input("Press Enter to close the browser...")
         
             
-
-
-
 
 
         except Exception as e:
