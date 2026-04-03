@@ -42,3 +42,8 @@ venv/
 # logs
 logs/
 *.log
+
+# html dump
+*.html
+
+
